@@ -19,3 +19,13 @@ const handleMouseMove = (event) => {
 		y: -ty
 	};
 };
+
+const handleTouchMove = (event) => {
+    const tx = -1 + (event.touches[0].clientX / WIDTH) * 2;
+    const ty = -1 + (event.touches[0].clientY / HEIGHT) * 2;
+    mousePos = {
+        x: tx,
+        y: -ty
+    };
+};
+

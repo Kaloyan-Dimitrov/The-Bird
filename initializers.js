@@ -11,6 +11,7 @@ let init = () => {
 	createEarth();
 	createSky();
 	document.addEventListener('mousemove', handleMouseMove, false);
+	document.addEventListener('touchmove', handleTouchMove, false);
 	loop();
 };
 
