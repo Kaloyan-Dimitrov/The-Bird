@@ -9,7 +9,7 @@ const Colors = {
 	green: 0x2eb107
 };
 Earth = function () {
-	const geometry = new THREE.CylinderGeometry(600, 600, 1000, 40, 10);
+	const geometry = new THREE.CylinderGeometry(600, 600, 2000, 40, 10);
 	geometry.applyMatrix(new THREE.Matrix4().makeRotationX(-Math.PI / 2));
 	const material = new THREE.MeshPhongMaterial({
 		color: Colors.green,
@@ -124,8 +124,8 @@ Tree = function () {
 	this.height = 30 + Math.random() * 70;
 	this.size = this.height / 100;
 	this.crown = new Crown();
-	this.crown.mesh.scale.set(this.size, this.size, this.size);
-	this.crown.mesh.position.z = this.height + 10;
+	this.crown.mesh.scale.set(this.size * 6, this.size * 6, this.size * 6);
+	this.crown.mesh.position.y = this.height + 10;
 	this.trunk = new Box(
 		this.size * 15,
 		this.height,
@@ -142,7 +142,7 @@ Forest = function () {
 	this.mesh = new THREE.Object3D();
 	this.nTrees = 30;
 
-	const stepAngle = Math.PI / this.nTrees;
+	const stepAngle = Math.PI * 2 / this.nTrees;
 
 	for (let i = 0; i < this.nTrees; i++) {
 		const t = new Tree();
