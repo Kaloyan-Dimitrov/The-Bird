@@ -93,16 +93,44 @@ Box = function (w, h, d, c, x, y, z) {
 
 Bird = function () {
     this.mesh = new THREE.Object3D();
-    this.body = new Box(60, 50, 50, Colors.red).mesh;
-    this.head = new Box(27, 25, 25, Colors.pink, 35, 25).mesh;
-    this.tail = new Box(15, 20, 5, Colors.pink, -35, 25, 0).mesh;
+    this.body = new THREE.Mesh(
+        new THREE.CylinderGeometry(25, 25, 60, 9),
+        new THREE.MeshPhongMaterial({
+            color: Colors.red,
+            flatShading: THREE.FlatShading
+        })
+    );
+    this.body.castShadow = true;
+    this.body.receiveShadow = true;
+    this.body.rotation.z += Math.PI / 2;
+    this.head = new THREE.Mesh(
+        new THREE.IcosahedronGeometry(20, 1),
+        new THREE.MeshPhongMaterial({
+            color: Colors.pink,
+            flatShading: THREE.FlatShading
+        })
+    );
+    this.head.position.set(35, 25, 0);
+    this.head.castShadow = true;
+    this.head.receiveShadow = true;
+    this.tail = new THREE.Mesh(
+        new THREE.ConeGeometry(25, 50),
+        new THREE.MeshPhongMaterial({
+            color: Colors.red,
+            flatShading: THREE.FlatShading
+        })
+    );
+    this.tail.position.set(-this.body.geometry.parameters.height / 2 - this.tail.geometry.parameters.height / 2, 0, 0);
+    this.tail.castShadow = true;
+    this.tail.receiveShadow = true;
+    this.tail.rotation.z += Math.PI / 2;
+    this.tail.geometry.vertices[0].x = 30;
     this.wings = [new THREE.Object3D(), new THREE.Object3D()];
     this.wingLenght = 48;
-    this.wings[0].add(new Box(40, 8, this.wingLenght, Colors.pink, 0, 0, (this.body.geometry.parameters.depth / 2)).mesh);
-    this.wings[0].position.set(0, 0, -this.body.geometry.parameters.depth / 2);
-    console.log(this.wings[0].children[0].position.z);
-    this.wings[1].add(new Box(40, 8, this.wingLenght, Colors.pink, 0, 0, (this.body.geometry.parameters.depth / 2)).mesh);
-    this.wings[1].position.set(0, 0, this.body.geometry.parameters.depth / 2);
+    this.wings[0].add(new Box(40, 8, this.wingLenght, Colors.pink, 0, 0, (this.body.geometry.parameters.radiusTop)).mesh);
+    this.wings[0].position.set(0, 0, -this.body.geometry.parameters.radiusTop);
+    this.wings[1].add(new Box(40, 8, this.wingLenght, Colors.pink, 0, 0, (this.body.geometry.parameters.radiusTop)).mesh);
+    this.wings[1].position.set(0, 0, this.body.geometry.parameters.radiusTop);
     this.neb = new Box(25, 5, 10, Colors.brown, 47.5, 25).mesh;
     this.mesh.add(this.body);
     this.mesh.add(this.head);
