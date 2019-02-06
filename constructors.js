@@ -15,7 +15,7 @@ Earth = function () {
     for (const v of geometry.vertices) {
         v.x += Math.cos(Math.random() * Math.PI * 2) * (5 + Math.random() * 15);
         v.y += Math.sin(Math.random() * Math.PI * 2) * (5 + Math.random() * 15);
-        
+
     }
     const material = new THREE.MeshPhongMaterial({
         color: Colors.green,
@@ -96,12 +96,19 @@ Bird = function () {
     this.body = new Box(60, 50, 50, Colors.red).mesh;
     this.head = new Box(27, 25, 25, Colors.pink, 35, 25).mesh;
     this.tail = new Box(15, 20, 5, Colors.pink, -35, 25, 0).mesh;
-    this.wings = new Box(40, 8, 150, Colors.pink).mesh;
+    this.wings = [new THREE.Object3D(), new THREE.Object3D()];
+    this.wingLenght = 48;
+    this.wings[0].add(new Box(40, 8, this.wingLenght, Colors.pink, 0, 0, (this.body.geometry.parameters.depth / 2)).mesh);
+    this.wings[0].position.set(0, 0, -this.body.geometry.parameters.depth / 2);
+    console.log(this.wings[0].children[0].position.z);
+    this.wings[1].add(new Box(40, 8, this.wingLenght, Colors.pink, 0, 0, (this.body.geometry.parameters.depth / 2)).mesh);
+    this.wings[1].position.set(0, 0, this.body.geometry.parameters.depth / 2);
     this.neb = new Box(25, 5, 10, Colors.brown, 47.5, 25).mesh;
     this.mesh.add(this.body);
     this.mesh.add(this.head);
     this.mesh.add(this.tail);
-    this.mesh.add(this.wings);
+    this.mesh.add(this.wings[0]);
+    this.mesh.add(this.wings[1]);
     this.mesh.add(this.neb);
 };
 
@@ -160,6 +167,5 @@ Forest = function () {
         t.mesh.rotation.z = a + Math.PI / 2;
         t.mesh.position.z = -200 - Math.random() * 400;
         this.mesh.add(t.mesh);
-
     }
 };

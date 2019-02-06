@@ -15,14 +15,17 @@ let init = () => {
     loop();
 };
 
-const updatePlane = () => {
+const updateBird = (frameC) => {
     const targetX = normalize(mousePos.x, -1, 1, -50, 50);
     const targetY = normalize(mousePos.y, -1, 1, 50, 150);
     bird.mesh.position.y += (targetY - bird.mesh.position.y) * 0.1;
     bird.mesh.position.x += (targetX - bird.mesh.position.x) * 0.1;
     bird.mesh.rotation.z = (targetY - bird.mesh.position.y) * 0.0128;
     bird.mesh.rotation.x = (bird.mesh.position.y - targetY) * 0.0064;
-};
+    const a = Math.PI / 4;
+    bird.wings[0].rotation.x = Math.sin(frameC / 17) * a + Math.PI;
+    bird.wings[1].rotation.x = Math.sin(-frameC / 17) * a;
+}
 
 const normalize = (v, vmin, vmax, tmin, tmax) => {
     const nv = Math.max(Math.min(v, vmax), vmin);
