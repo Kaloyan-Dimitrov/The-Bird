@@ -23,8 +23,10 @@ const updateBird = (frameC) => {
     bird.mesh.rotation.z = (targetY - bird.mesh.position.y) * 0.0128;
     bird.mesh.rotation.x = (bird.mesh.position.y - targetY) * 0.0064;
     const a = Math.PI / 4;
-    bird.wings[0].rotation.x = Math.sin(frameC / 17) * a + Math.PI;
-    bird.wings[1].rotation.x = Math.sin(-frameC / 17) * a;
+    const dist = distance(targetX, targetY, bird.mesh.position.y, bird.mesh.position.x);
+    const speed = normalize(dist, -70, 70, 10, 15);
+    bird.wings[0].rotation.x = Math.sin(frameC / speed) * a + Math.PI;
+    bird.wings[1].rotation.x = Math.sin(-frameC / speed) * a;
 }
 
 const normalize = (v, vmin, vmax, tmin, tmax) => {
@@ -35,6 +37,13 @@ const normalize = (v, vmin, vmax, tmin, tmax) => {
     const tv = tmin + (pc * dt);
     return tv;
 };
+
+const distance = (ax, ay, bx, by) => {
+    const a = Math.abs(ax - bx);
+    const b = Math.abs(ay - by);
+    const c = Math.sqrt(a * a + b * b);
+    return c;
+}
 let createLights = () => {
     hemisphereLight = new THREE.HemisphereLight(0xaaaaaa, 0x000000, 0.9);
 

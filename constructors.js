@@ -127,9 +127,41 @@ Bird = function () {
     this.tail.geometry.vertices[0].x = 30;
     this.wings = [new THREE.Object3D(), new THREE.Object3D()];
     this.wingLenght = 48;
-    this.wings[0].add(new Box(40, 8, this.wingLenght, Colors.pink, 0, 0, (this.body.geometry.parameters.radiusTop)).mesh);
+    this.wingShape = new THREE.Shape();
+    this.wingShape.moveTo(20, 0);
+    this.wingShape.lineTo(-20, 0);
+    this.wingShape.lineTo(-15, this.wingLenght);
+    this.wingShape.lineTo(15, this.wingLenght);
+    this.wingShape.lineTo(20, 0);
+    const extrudeSettings = {
+        steps: 2,
+        depth: 8,
+        bevelEnabled: true,
+        bevelThickness: 1,
+        bevelSize: 1,
+        bevelSegments: 1
+    };
+    this.wings[0].add(new THREE.Mesh(
+        new THREE.ExtrudeGeometry(this.wingShape, extrudeSettings),
+        new THREE.MeshPhongMaterial({
+            color: Colors.pink,
+            flatShading: THREE.FlatShading
+        })
+    ));
+    this.wings[0].children[0].castShadow = true;
+    this.wings[0].children[0].recieveShadow = true;
+    this.wings[0].children[0].rotation.x = Math.PI / 2;
     this.wings[0].position.set(0, 0, -this.body.geometry.parameters.radiusTop);
-    this.wings[1].add(new Box(40, 8, this.wingLenght, Colors.pink, 0, 0, (this.body.geometry.parameters.radiusTop)).mesh);
+    this.wings[1].add(new THREE.Mesh(
+        new THREE.ExtrudeGeometry(this.wingShape, extrudeSettings),
+        new THREE.MeshPhongMaterial({
+            color: Colors.pink,
+            flatShading: THREE.FlatShading
+        })
+    ));
+    this.wings[1].children[0].castShadow = true;
+    this.wings[1].children[0].recieveShadow = true;
+    this.wings[1].children[0].rotation.x = Math.PI / 2 + Math.PI * 2;
     this.wings[1].position.set(0, 0, this.body.geometry.parameters.radiusTop);
     this.neb = new Box(25, 5, 10, Colors.brown, 47.5, 25).mesh;
     this.mesh.add(this.body);

@@ -8,7 +8,6 @@ const loop = () => {
 	updateBird(frameC);
 	requestAnimationFrame(loop);
 	frameC ++;
-	
 };
 
 
