@@ -21,6 +21,7 @@ const handleMouseMove = (event) => {
 };
 
 const handleTouchMove = (event) => {
+	event.preventDefault();
     const tx = -1 + (event.touches[0].clientX / WIDTH) * 2;
     const ty = -1 + (event.touches[0].clientY / HEIGHT) * 2;
     mousePos = {

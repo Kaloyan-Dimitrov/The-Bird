@@ -1,7 +1,7 @@
 /*jshint esversion: 6*/
 let forest, earth, sky, bird;
 let scene, camera, fieldOfView, aspectRatio, nearPlane,
-    farPlane, HEIGHT, WIDTH, renderer, container;
+    farPlane, HEIGHT, WIDTH, renderer, container, candies;
 let hemisphereLight, shadowLight;
 let init = () => {
     createScene();
@@ -10,6 +10,7 @@ let init = () => {
     createBird();
     createEarth();
     createSky();
+    createCandies();
     document.addEventListener('mousemove', handleMouseMove, false);
     document.addEventListener('touchmove', handleTouchMove, false);
     loop();
@@ -23,10 +24,8 @@ const updateBird = (frameC) => {
     bird.mesh.rotation.z = (targetY - bird.mesh.position.y) * 0.0128;
     bird.mesh.rotation.x = (bird.mesh.position.y - targetY) * 0.0064;
     const a = Math.PI / 4;
-    const dist = distance(targetX, targetY, bird.mesh.position.y, bird.mesh.position.x);
-    const speed = normalize(dist, -70, 70, 10, 15);
-    bird.wings[0].rotation.x = Math.sin(frameC / speed) * a + Math.PI;
-    bird.wings[1].rotation.x = Math.sin(-frameC / speed) * a;
+    bird.wings[0].rotation.x = Math.sin(frameC / (17 - speed / 0.0015 * 17)) * a + Math.PI;
+    bird.wings[1].rotation.x = Math.sin(-frameC / (17 - speed / 0.0015 * 17)) * a;
 }
 
 const normalize = (v, vmin, vmax, tmin, tmax) => {
@@ -68,7 +67,6 @@ const createForest = () => {
     forest = new Forest();
     forest.mesh.position.y = -600;
     scene.add(forest.mesh);
-
 };
 
 const createEarth = () => {
@@ -76,6 +74,12 @@ const createEarth = () => {
     earth.mesh.position.y = -600;
     scene.add(earth.mesh);
 };
+
+const createCandies = () => {
+    candies = new Candies();
+    candies.mesh.position.y = -600;
+    scene.add(candies.mesh);
+}
 
 const createSky = () => {
     sky = new Sky();
