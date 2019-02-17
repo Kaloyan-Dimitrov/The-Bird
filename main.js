@@ -1,7 +1,6 @@
 /*jshint esversion: 6 */
 let frameC = 0;
 let speed = 0.003;
-// TODO: Increase the speed over time
 const loop = () => {
 	earth.mesh.rotation.z += speed;
 	sky.mesh.rotation.z += speed * 0.2;
@@ -12,7 +11,6 @@ const loop = () => {
 	requestAnimationFrame(loop);
 	frameC ++;
 	speed += 0.0000002;
-
 };
 
 

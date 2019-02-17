@@ -73,7 +73,7 @@ Sky = function () {
         this.mesh.add(c.mesh);
     }
 };
-
+// TODO: ADD COLLIDERS
 Candy = function (d, x, y, z) {
     this.mesh = new THREE.Mesh(
         new THREE.IcosahedronGeometry(d, 1),

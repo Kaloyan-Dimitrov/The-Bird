@@ -26,7 +26,8 @@ const updateBird = (frameC) => {
     const a = Math.PI / 4;
     bird.wings[0].rotation.x = Math.sin(frameC / (17 - speed / 0.0015 * 17)) * a + Math.PI;
     bird.wings[1].rotation.x = Math.sin(-frameC / (17 - speed / 0.0015 * 17)) * a;
-}
+};
+// TODO: REMAKE THE BIRD'S GEOMETRY
 
 const normalize = (v, vmin, vmax, tmin, tmax) => {
     const nv = Math.max(Math.min(v, vmax), vmin);
