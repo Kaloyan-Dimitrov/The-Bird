@@ -140,4 +140,4 @@ const createScene = () => {
     document.getElementById('world').appendChild(renderer.domElement);
 
     window.addEventListener('resize', handleWindowResize, false);
-};
+}
