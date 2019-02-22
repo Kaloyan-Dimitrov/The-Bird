@@ -74,22 +74,6 @@ Sky = function () {
     }
 };
 // TODO: ADD COLLIDERS
-Candy = function (d, x, y, z) {
-    this.mesh = new THREE.Mesh(
-        new THREE.IcosahedronGeometry(d, 1),
-        new THREE.MeshPhongMaterial({
-            color: Colors.blue,
-            flatShading: THREE.FlatShading
-        })
-    );
-    this.mesh.castShadow = true;
-    this.mesh.receiveShadow = true;
-    this.mesh.position.set(
-        x === undefined ? 0 : x,
-        y === undefined ? 0 : y,
-        z === undefined ? 0 : z
-    );
-};
 
 
 Box = function (w, h, d, c, x, y, z) {
@@ -247,16 +231,33 @@ Forest = function () {
         this.mesh.add(t.mesh);
     }
 };
+Particle = function (d, x, y, z) {
+    this.mesh = new THREE.Mesh(
+        new THREE.IcosahedronGeometry(d, 1),
+        new THREE.MeshPhongMaterial({
+            color: Colors.blue,
+            flatShading: THREE.FlatShading
+        })
+    );
+    this.mesh.castShadow = true;
+    this.mesh.receiveShadow = true;
+    this.mesh.position.set(
+        x === undefined ? 0 : x,
+        y === undefined ? 0 : y,
+        z === undefined ? 0 : z
+    );
+};
 
-Candies = function () {
+Particles = function () {
     this.mesh = new THREE.Object3D();
     this.nCandies = 50;
     const stepAngle = Math.PI * 2 / this.nCandies;
     for (let i = 0; i < this.nCandies; i++) {
         const a = stepAngle * i - Math.PI / this.nCandies + Math.random() * (Math.PI * 2 / this.nCandies);
         const h = -700;
-        const c = new Candy(5, Math.cos(a) * h, Math.sin(a) * h -50 + Math.random() * 100);
-        c.mesh.rotation.z = a + Math.PI / 2;
-        this.mesh.add(c.mesh);
+        const p = new Particle(5, Math.cos(a) * h, Math.sin(a) * h -50 + Math.random() * 100);
+        p.mesh.rotation.z = a + Math.PI / 2;
+        this.mesh.add(p.mesh);
+        p.mesh.name = a;
     }
 }

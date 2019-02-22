@@ -1,7 +1,7 @@
 /*jshint esversion: 6*/
 let forest, earth, sky, bird;
 let scene, camera, fieldOfView, aspectRatio, nearPlane,
-    farPlane, HEIGHT, WIDTH, renderer, container, candies;
+    farPlane, HEIGHT, WIDTH, renderer, container, particles, particlesAngle = 0;
 let hemisphereLight, shadowLight;
 let init = () => {
     createScene();
@@ -10,7 +10,7 @@ let init = () => {
     createBird();
     createEarth();
     createSky();
-    createCandies();
+    createParticles();
     document.addEventListener('mousemove', handleMouseMove, false);
     document.addEventListener('touchmove', handleTouchMove, false);
     loop();
@@ -29,6 +29,21 @@ const updateBird = (frameC) => {
 };
 // TODO: REMAKE THE BIRD'S GEOMETRY
 
+const updateParticles = () => {
+    particles.mesh.children.forEach(p => {
+        p.name += speed;
+        p.position.x = Math.cos(p.name) * -700;
+        p.position.y = Math.sin(p.name) * -700 -50 + Math.random() * 100;
+    }); 
+    for (let i = 0; i < particles.mesh.children.length; i++) {
+        const p = particles.mesh.children[i];
+        var dist = (new THREE.Vector2(bird.mesh.position.x, bird.mesh.position.y))
+            .distanceTo(new THREE.Vector2(p.position.x, p.position.y - 600)); // TODO: GetWorldPosition - global position getter
+        if(dist < 43) {       
+            particles.mesh.children.splice(i, 1);
+        }
+    }
+};
 const normalize = (v, vmin, vmax, tmin, tmax) => {
     const nv = Math.max(Math.min(v, vmax), vmin);
     const dv = vmax - vmin;
@@ -76,10 +91,10 @@ const createEarth = () => {
     scene.add(earth.mesh);
 };
 
-const createCandies = () => {
-    candies = new Candies();
-    candies.mesh.position.y = -600;
-    scene.add(candies.mesh);
+const createParticles = () => {
+    particles = new Particles();
+    particles.mesh.position.y = -600;
+    scene.add(particles.mesh);
 }
 
 const createSky = () => {
