@@ -3,26 +3,25 @@
 
 <head>
     <title>The Bird</title>
+    <link href="https://fonts.googleapis.com/css?family=ZCOOL+QingKe+HuangYou" rel="stylesheet">
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/three.js/101/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/5.4.2/math.min.js"></script>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-        }
-
-        #world {
-            position: absolute;
-            margin: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background: linear-gradient(#e4e0ba, #f7d9aa);
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="buttons.css">
 </head>
 
 <body>
+    <div class="overlay" id="meters">
+        <div id="mtxt"class="unselectable">*** m</div>
+    </div>
+
+    <div class="overlay" id="gameover">
+        <div id="gtxt" class="unselectable">
+            Game over
+            <br>
+            <button class="pushy__btn pushy__btn--df pushy__btn--red" id="gameoverb" onclick="init()">Restart</button>
+        </div>
+    </div>
     <div id="world"></div>
 </body>
 <script src="constructors.js"></script>

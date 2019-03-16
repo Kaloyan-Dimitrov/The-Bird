@@ -73,7 +73,6 @@ Sky = function () {
         this.mesh.add(c.mesh);
     }
 };
-// TODO: ADD COLLIDERS
 
 
 Box = function (w, h, d, c, x, y, z) {
@@ -231,11 +230,11 @@ Forest = function () {
         this.mesh.add(t.mesh);
     }
 };
-Particle = function (d, x, y, z) {
+Particle = function (d, x, y, z, c) {
     this.mesh = new THREE.Mesh(
         new THREE.IcosahedronGeometry(d, 1),
         new THREE.MeshPhongMaterial({
-            color: Colors.blue,
+            color: c,
             flatShading: THREE.FlatShading
         })
     );
@@ -250,14 +249,38 @@ Particle = function (d, x, y, z) {
 
 Particles = function () {
     this.mesh = new THREE.Object3D();
-    this.nCandies = 50;
-    const stepAngle = Math.PI * 2 / this.nCandies;
-    for (let i = 0; i < this.nCandies; i++) {
-        const a = stepAngle * i - Math.PI / this.nCandies + Math.random() * (Math.PI * 2 / this.nCandies);
+    this.nParticles = 50;
+    const stepAngle = Math.PI * 2 / this.nParticles;
+    for (let i = 0; i < this.nParticles; i++) {
+        const a = stepAngle * i - Math.PI / this.nParticles + Math.random() * (Math.PI * 2 / this.nParticles);
         const h = -700;
-        const p = new Particle(5, Math.cos(a) * h, Math.sin(a) * h -50 + Math.random() * 100);
-        p.mesh.rotation.z = a + Math.PI / 2;
-        this.mesh.add(p.mesh);
-        p.mesh.name = a;
+        const c = new Particle(5, Math.cos(a) * h, Math.sin(a) * h -50 + Math.random() * 100, 0, Colors.blue);
+        c.mesh.rotation.z = a + Math.PI / 2;
+        this.mesh.add(c.mesh);
     }
-}
+    this.respawn = (a) => {
+        const h = -700;
+        const c = new Particle(5, Math.cos(a) * h, Math.sin(a) * h -50 + Math.random() * 100, 0, Colors.blue);
+        c.mesh.rotation.z = a + Math.PI / 2;
+        this.mesh.add(c.mesh);
+    }
+};
+
+MParticles = function () {
+    this.mesh = new THREE.Object3D();
+    this.nParticles = 35;
+    const stepAngle = Math.PI * 2 / this.nParticles;
+    for (let i = 0; i < this.nParticles; i++) {
+        const a = stepAngle * i - Math.PI / this.nParticles + Math.random() * (Math.PI * 2 / this.nParticles);
+        const h = -700;
+        const c = new Particle(9, Math.cos(a) * h, Math.sin(a) * h -50 + Math.random() * 100, -30, Colors.red);
+        c.mesh.rotation.z = a + Math.PI / 2;
+        this.mesh.add(c.mesh);
+    }
+    this.respawn = (a) => {
+        const h = -700;
+        const c = new Particle(5, Math.cos(a) * h, Math.sin(a) * h -50 + Math.random() * 100, 0, Colors.blue);
+        c.mesh.rotation.z = a + Math.PI / 2;
+        this.mesh.add(c.mesh);
+    }
+};

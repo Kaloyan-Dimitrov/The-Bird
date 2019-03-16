@@ -1,9 +1,23 @@
 /*jshint esversion: 6*/
 let forest, earth, sky, bird;
 let scene, camera, fieldOfView, aspectRatio, nearPlane,
-    farPlane, HEIGHT, WIDTH, renderer, container, particles, particlesAngle = 0;
+    farPlane, HEIGHT, WIDTH, SWIDTH, SHEIGHT, renderer, container, mparticles, particles, particlesAngle = 0;
 let hemisphereLight, shadowLight;
+let dist = 0;
+let offset = 10;
+let lp = true;
 let init = () => {
+    if(scene) { 
+        console.log(scene.children);
+        while(scene.children.length > 0){ 
+            scene.remove(scene.children[0]);
+        }
+    }
+    particlesAngle = 0; 
+    lp = true;
+    speed = 0.003;
+    frameC = 0;
+    dist = 0;
     createScene();
     createForest();
     createLights();
@@ -11,9 +25,26 @@ let init = () => {
     createEarth();
     createSky();
     createParticles();
+    createMParticles();
     document.addEventListener('mousemove', handleMouseMove, false);
+    document.addEventListener('click', handleClick, false);
     document.addEventListener('touchmove', handleTouchMove, false);
+    document.addEventListener('keydown', handleKeyPress, false);
+    document.getElementById('gameover').style.display = 'none';
+    document.getElementById('meters').style.display = 'block';  
     loop();
+};
+
+const toggleGameOver = () => {
+    lp = false;
+    document.getElementById('meters').style.display = 'none';
+    document.getElementById('gameover').style.display = 'block';
+}
+
+const updateDist = () => {
+    dist += speed * 1000 / 25;
+    const el = document.getElementById('mtxt');
+    el.innerHTML = `${Math.floor(dist)} m`
 };
 
 const updateBird = (frameC) => {
@@ -24,26 +55,40 @@ const updateBird = (frameC) => {
     bird.mesh.rotation.z = (targetY - bird.mesh.position.y) * 0.0128;
     bird.mesh.rotation.x = (bird.mesh.position.y - targetY) * 0.0064;
     const a = Math.PI / 4;
-    bird.wings[0].rotation.x = Math.sin(frameC / (17 - speed / 0.0015 * 17)) * a + Math.PI;
-    bird.wings[1].rotation.x = Math.sin(-frameC / (17 - speed / 0.0015 * 17)) * a;
+    bird.wings[0].rotation.x = Math.sin(frameC / (0.0015 * 17 / speed)) * a + Math.PI;
+    bird.wings[1].rotation.x = Math.sin(-frameC / (0.0015 * 17 / speed)) * a;
 };
 // TODO: REMAKE THE BIRD'S GEOMETRY
 
 const updateParticles = () => {
-    particles.mesh.children.forEach(p => {
-        p.name += speed;
-        p.position.x = Math.cos(p.name) * -700;
-        p.position.y = Math.sin(p.name) * -700 -50 + Math.random() * 100;
-    }); 
     for (let i = 0; i < particles.mesh.children.length; i++) {
         const p = particles.mesh.children[i];
-        var dist = (new THREE.Vector2(bird.mesh.position.x, bird.mesh.position.y))
-            .distanceTo(new THREE.Vector2(p.position.x, p.position.y - 600)); // TODO: GetWorldPosition - global position getter
-        if(dist < 43) {       
+        let bird_pos = new THREE.Vector3();
+        bird.mesh.getWorldPosition(bird_pos);
+        let p_pos = new THREE.Vector3();
+        p.getWorldPosition(p_pos);
+        var dist = (p_pos).distanceTo(bird_pos);
+        if (dist < 12) {
+            //  console.log(bird_pos, p_pos)
             particles.mesh.children.splice(i, 1);
+            initX = bird.mesh.position.x;
+            let isBack = false,
+                current = 0;
+            let moveBack = setInterval(function () {
+                if (Math.sin((current / 400) * (Math.PI)) == 1) isBack = true;
+                bird.mesh.position.x = initX +
+                    isBack ?
+                    -1 + Math.sin((current / 400) * (Math.PI)) * offset :
+                    Math.sin((current / 400) * (Math.PI)) * offset;
+                //console.log(Math.sin((current / 40) * (Math.PI)))
+                if(current >= 39) clearInterval(moveBack);
+                current += 1;
+            }, 1);
+            particles.respawn(Math.random() * 2 * Math.PI);
         }
     }
 };
+
 const normalize = (v, vmin, vmax, tmin, tmax) => {
     const nv = Math.max(Math.min(v, vmax), vmin);
     const dv = vmax - vmin;
@@ -97,6 +142,12 @@ const createParticles = () => {
     scene.add(particles.mesh);
 }
 
+const createMParticles = () => {
+    mparticles = new MParticles();
+    mparticles.mesh.position.y = -600;
+    scene.add(mparticles.mesh);
+}
+
 const createSky = () => {
     sky = new Sky();
     sky.mesh.position.y = -600;
@@ -131,13 +182,17 @@ const createScene = () => {
     camera.position.z = 200;
     camera.position.y = 100;
 
+    var vFOV = THREE.Math.degToRad( camera.fov ); // convert vertical fov to radians
+    SHEIGHT = 2 * Math.tan( vFOV / 2 ) * 200; // visible height
+    SWIDTH = SHEIGHT * camera.aspect;
+
     renderer = new THREE.WebGLRenderer({
         alpha: true,
         antialias: true
     });
     renderer.setSize(WIDTH, HEIGHT);
     renderer.shadowMap.enabled = true;
+    if(document.getElementById('world').children.length > 0) document.getElementById('world').removeChild(document.getElementById('world').childNodes[0])
     document.getElementById('world').appendChild(renderer.domElement);
-
     window.addEventListener('resize', handleWindowResize, false);
 }

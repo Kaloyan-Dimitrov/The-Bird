@@ -1,0 +1,67 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+#world {
+    position: absolute;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: linear-gradient(#e4e0ba, #f7d9aa);
+}
+
+.overlay {
+    position: fixed;
+    z-index: 2;     
+    display: block;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+#mtxt {
+    font-family: 'ZCOOL QingKe HuangYou', cursive;
+    position: absolute;
+    top: 6%;
+    left: 50%;
+    font-size: 50px;
+    color: #4d71e6;
+    transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+}
+
+#gtxt {
+    font-family: 'ZCOOL QingKe HuangYou', cursive;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    font-size: 150px;
+    color: #e26767;
+    transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+}
+
+#gameover {
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+#gameoverb {
+    font-size: 20px;
+    position: absolute;
+    font-family: 'ZCOOL QingKe HuangYou', cursive;
+    top: 140%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+}
+
+*.unselectable {
+    user-select: none;
+ }
+
+
